@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_861634_zme8k2oqyoq.css">
+    <style>
+        a{
+            text-decoration: none;
+            color: #333;
+        }
+        .wrapper{
+            margin: 100px auto;
+            width: 800px;
+            border: 1px solid #e5e5e5;
+        }
+        .control-area{
+            background-color: #ddd;
+            height: 50px;
+            color: #999;
+        }
+        .control-area a{
+            color: #999;
+            display: inline-block;
+            margin: 10px;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            text-decoration: none;
+            line-height: 30px;
+        }
+        .control-area a:hover{
+            background-color: #ccc;
+        }
+        .text-area{
+            outline: none;
+            height: 450px;
+        }
+        .ads{
+            width:60px ;
+            height: 800px;
+            background-color: red;
+        }
+        #mask-content{
+            /*opacity: 1;*/
+            width: 600px;
+            height: 500px;
+            background-color: white;
+            border: 1px solid #e5e5e5;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%,-50%,0);
+        }
+        .mask-upload{
+            display: block;
+            position: absolute;
+            width: 100px;
+            height: 40px;
+            background-color: #e44;
+            text-align: center;
+            line-height: 40px;
+            color: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 5px;
+            top: 20%;
+            left: 40%;
+        }
+        .mask-upload:hover{
+            background-color: #d22;
+        }
+        .mask-picpng{
+            width: 150px;
+            height: 100px;
+            background: url("a.png") no-repeat;
+            background-size:100% 100%;
+            position: absolute;
+            top: 30%;
+            left: 35%;
+
+        }
+        #q{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="control-area">
+            <a class="control-btn" href="javascript:void 0" data-index="0" data-command="FontSize" data-value="5" onclick="changeStyle(this)">
+                <span class="iconfont icon-biaotizhengwenqiehuan"></span>
+            </a>
+            <a class="control-btn" href="javascript:void 0" data-index="0" data-command="Bold" onclick="changeStyle(this)">
+                <span class="iconfont icon-cuti"></span>
+            </a>
+            <a class="control-btn" href="javascript:void 0" data-index="0" data-command="Italic" onclick="changeStyle(this)">
+                <span class="iconfont icon-xieti1"></span>
+            </a>
+            |
+            <a id="pic" class="control-btn" href="javascript:void 0" >
+                <span class="iconfont icon-charutupian"></span>
+            </a>
+        </div>
+        <div class="text-area" contenteditable="true"></div>
+    </div>
+    <div id="mask">
+        <div id="mask-content">
+                <label for="mask-pic" class="mask-upload">
+                    上传图片
+                </label>
+                <input type="file" id="mask-pic" hidden >
+                <img class="mask-picpng" src="a.png" width="150" alt="上传图片">
+
+            <button id="q">确定</button>
+        </div>
+    </div>
+
+    <script src="y_mask.js"></script>
+    <script>
+        //遮罩插件
+        let ymask = new yMask('#pic','#mask');
+        function changeStyle(control_btn){
+            control_btn.dataset.value?document.execCommand(control_btn.dataset.command,false,control_btn.dataset.value):document.execCommand(control_btn.dataset.command,false,null);
+            if(control_btn.dataset.index === "0"){
+                control_btn.dataset.index="1";
+                control_btn.style.backgroundColor = '#555';
+            }else{
+                control_btn.dataset.index="0";
+                control_btn.style.backgroundColor = '#ddd';
+            }
+        }
+
+        document.getElementById('q').onclick=function () {
+            ymask.clickEl2();
+            document.getElementsByClassName('mask-picpng')[0].setAttribute('src','a.png');
+            let textArea = document.getElementsByClassName('text-area')[0];
+            let pic = document.createElement('img');
+            pic.src = window.URL.createObjectURL(document.getElementById('mask-pic').files[0]);
+            textArea.appendChild(pic);
+        };
+        document.getElementById('mask-pic').onchange=function () {
+            document.getElementById('q').style.display = 'block';
+            document.getElementsByClassName('mask-picpng')[0].setAttribute('src',window.URL.createObjectURL(this.files[0]))
+        }
+
+    </script>
+</body>
+</html>
